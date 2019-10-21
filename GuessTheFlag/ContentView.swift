@@ -32,10 +32,7 @@ struct ContentView: View {
                         Button(action: {
                             self.flagTapped(number)
                         }){
-                            Image(self.countries[number])
-                                .renderingMode(.original).clipShape(Capsule())
-                                .overlay(Capsule().stroke(Color.black, lineWidth: 1))
-                                .shadow(color: .black, radius: 2)
+                            FlagImage(self.countries[number])
                         }
                     }
                 Text("Score: \(score)").foregroundColor(.white).font(.largeTitle)
@@ -74,5 +71,33 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+    }
+}
+
+struct FlagImage: View {
+    var imageName: String
+
+    init(_ imageName: String) {
+        self.imageName = imageName
+    }
+
+    var body: some View {
+        Image(imageName)
+            .renderingMode(.original).clipShape(Capsule())
+            .imageStyle()
+    }
+}
+
+struct ImageModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .overlay(Capsule().stroke(Color.black, lineWidth: 1))
+            .shadow(color: .black, radius: 2)
+    }
+}
+
+extension View {
+    func imageStyle() -> some View {
+        self.modifier(ImageModifier())
     }
 }
